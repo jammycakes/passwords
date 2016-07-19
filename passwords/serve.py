@@ -7,6 +7,7 @@ import hashlib
 from datetime import datetime
 from flask import Flask, request
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -87,7 +88,9 @@ Deletes the password with specified ID from the database.
 '''
 @app.route('/password/<id>', methods=['DELETE'])
 def delete_password(id):
-    pass
+    oid = ObjectId(id)
+    __delete_record(oid)
+    return 'OK'
 
 
 # ====== Tests a password ====== #
