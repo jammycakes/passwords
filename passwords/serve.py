@@ -40,8 +40,7 @@ def __hash_password(pwd):
     return bcrypt.hashpw(__prehash(pwd), salt)
 
 def __test_password(pwd, stored):
-    encoded_stored = stored.encode()
-    return bcrypt.hashpw(__prehash(pwd), encoded_stored) == encoded_stored
+    return bcrypt.hashpw(__prehash(pwd), stored) == stored
 
 
 # ====== CRUD operations ====== #
@@ -96,11 +95,22 @@ def delete_password(id):
 # ====== Tests a password ====== #
 
 '''
-Tests the password with given ID. Returns true if the password is correct, otherwise false.
+Tests the password with given ID.
+
+Returns true/200 OK if the password is correct, otherwise false/403 Forbidden.
 '''
 @app.route('/password/test/<id>', methods=['POST'])
 def test_password(id):
+    oid = ObjectId(id)
     pwd = request.form['password']
+    rec = __get_record(oid)
+    if not rec:
+        return 'false', 403
+    is_correct = __test_password(pwd, rec['hash'])
+    if is_correct:
+        return 'true'
+    else:
+        return 'false', 403
 
 
 if __name__ == '__main__':
