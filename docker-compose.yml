@@ -1,7 +1,39 @@
+# vim: ts=2 sts=2 sw=2 et:
+
 version: '2'
+
 services:
+  traefik:
+    image: traefik
+    command: --web --docker --docker.domain=wowtree.localhost --logLevel=DEBUG
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/null:/traefik.toml
+
+  passwords-db:
+    image: mongo
+
+  passwords-svc:
+    build: ./passwords
+    command: python serve.py
+    labels:
+      - "traefik.backend=passwords"
+      - "traefik.frontend.rule=Host:passwords.wowtree.localhost"
+    links:
+      - passwords-db
+    ports:
+      - "5000"
+    volumes:
+      - ./passwords:/code
+    environment:
+      GLOBAL_SALT: "vgauiLoEurnGEkKrnWk9RkE7jegAGB7zsgjipmv375C9xBAi1x0Dgv7rZHJFOxVA"
+      WORK_FACTOR: "12"
+
   db:
     image: postgres
+
   web:
     build: ./web
     command: python manage.py runserver 0.0.0.0:8000
