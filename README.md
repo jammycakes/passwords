@@ -21,13 +21,13 @@ Stores a password in the database. Should be passed in as a form field called `p
 
  * Returns the password ID. This should be stored in the user database.
 
-### DELETE /password/<id>
+### DELETE /password/\<id\>
 
 Deletes a password from the password database.
 
  * Returns 200 OK.
 
-### POST /password/test/<id>
+### POST /password/test/\<id\>
 
 Tests a password with the specified ID against the database.
 The password should be passed in as a form field called `password`.
