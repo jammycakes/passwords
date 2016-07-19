@@ -10,7 +10,3 @@ run:
 rebuild:
 	docker-compose down
 	docker-compose up -d
-
-test:
-	docker-compose run web rake spec
-	docker-compose down
