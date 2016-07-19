@@ -5,7 +5,7 @@ version: '2'
 services:
   traefik:
     image: traefik
-    command: --web --docker --docker.domain=wowtree.localhost --logLevel=DEBUG
+    command: --web --docker --docker.domain=passwords.localhost --logLevel=DEBUG
     ports:
       - "80:80"
       - "8080:8080"
@@ -20,8 +20,8 @@ services:
     build: ./passwords
     command: python serve.py
     labels:
-      - "traefik.backend=passwords"
-      - "traefik.frontend.rule=Host:passwords.wowtree.localhost"
+      - "traefik.backend=service"
+      - "traefik.frontend.rule=Host:service.passwords.localhost"
     links:
       - passwords-db
     ports:
