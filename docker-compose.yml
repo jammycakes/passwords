@@ -12,6 +12,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/null:/traefik.toml
+    depends_on:
+      - passwords-svc
 
   passwords-db:
     image: mongo
@@ -42,5 +44,9 @@ services:
       - ./web:/code
     ports:
       - "8000"
+    links:
+      - db
+      - passwords-svc
+      - traefik:service.passwords.localhost
     depends_on:
       - db
