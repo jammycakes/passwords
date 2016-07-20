@@ -39,7 +39,7 @@ services:
 
   web:
     build: ./web
-    command: bash -c "sleep 3 && ./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
+    command: bash -c "sleep 5 && ./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./web:/code
     ports:
