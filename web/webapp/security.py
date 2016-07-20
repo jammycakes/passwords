@@ -1,5 +1,6 @@
-import urllib.request
+import urllib.error
 import urllib.parse
+import urllib.request
 
 from django.contrib.auth.hashers import BasePasswordHasher
 from django.utils.translation import ugettext_noop as _
@@ -28,9 +29,12 @@ class ServicePasswordHasher(BasePasswordHasher):
         assert algorithm == self.algorithm
         data = urllib.parse.urlencode({ 'password': password })
         data = data.encode('ascii')
-        url = SERVICE_BASE_URL + 'password/test/' + urllib.parse.urlencode(password_id)
-        with urllib.request.urlopen(url, data) as f:
-            return f.getcode() < 400
+        url = SERVICE_BASE_URL + 'password/test/' + urllib.parse.quote(password_id)
+        try:
+            with urllib.request.urlopen(url, data) as f:
+                return f.getcode() < 400
+        except urllib.error.HTTPError:
+            return False
 
     def safe_summary(self):
         algorithm, password_id = encoded.split('$', 1)

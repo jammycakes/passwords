@@ -44,6 +44,9 @@ services:
       - ./web:/code
     ports:
       - "8000"
+    labels:
+      - "traefik.backend=web"
+      - "traefik.frontend.rule=Host:web.passwords.localhost"
     links:
       - db
       - passwords-svc
