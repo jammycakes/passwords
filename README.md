@@ -44,6 +44,12 @@ Environment variables
 This is a secret added to the password to make brute forcing all but impossible to attackers.
 In production systems, it should ideally be stored in a secret store such as Hashicorp Vault.
 
+### KEY_SECRET
+
+This is a second secret, which is added to the password ID to make it all but impossible for
+an attacker to match up passwords with user accounts. Again, in production systems, it should
+ideally be stored in a secret store.
+
 ### WORK_FACTOR
 
 The work factor used by the bcrypt algorithm. A factor of about 12 means that hashing takes
