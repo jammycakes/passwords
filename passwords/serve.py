@@ -15,7 +15,7 @@ app = Flask(__name__)
 def hello():
     return 'Hello world!'
 
-GLOBAL_SALT = os.environ['GLOBAL_SALT']
+PASSWORD_SECRET = os.environ['PASSWORD_SECRET']
 WORK_FACTOR = int(os.environ['WORK_FACTOR'])
 
 # ====== Password hashing ====== #
@@ -33,7 +33,7 @@ a password-specific salt.
 '''
 
 def __prehash(pwd):
-    return hashlib.sha512((pwd + GLOBAL_SALT).encode()).digest()
+    return hashlib.sha512((pwd + PASSWORD_SECRET).encode()).digest()
 
 def __hash_password(pwd):
     salt = bcrypt.gensalt(WORK_FACTOR)

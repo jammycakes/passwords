@@ -31,7 +31,7 @@ services:
     volumes:
       - ./passwords:/code
     environment:
-      GLOBAL_SALT: "vgauiLoEurnGEkKrnWk9RkE7jegAGB7zsgjipmv375C9xBAi1x0Dgv7rZHJFOxVA"
+      PASSWORD_SECRET: "vgauiLoEurnGEkKrnWk9RkE7jegAGB7zsgjipmv375C9xBAi1x0Dgv7rZHJFOxVA"
       WORK_FACTOR: "12"
 
   db:

@@ -39,7 +39,7 @@ The password should be passed in as a form field called `password`.
 Environment variables
 ---------------------
 
-### GLOBAL_SALT
+### PASSWORD_SECRET
 
 This is a secret added to the password to make brute forcing all but impossible to attackers.
 In production systems, it should ideally be stored in a secret store such as Hashicorp Vault.
