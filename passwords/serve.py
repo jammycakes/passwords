@@ -3,6 +3,7 @@
 import os
 import bcrypt
 import hashlib
+import uuid
 
 from datetime import datetime
 from flask import Flask, request
@@ -16,6 +17,7 @@ def hello():
     return 'Hello world!'
 
 PASSWORD_SECRET = os.environ['PASSWORD_SECRET']
+KEY_SECRET = os.environ['KEY_SECRET']
 WORK_FACTOR = int(os.environ['WORK_FACTOR'])
 
 # ====== Password hashing ====== #
@@ -63,7 +65,13 @@ def __delete_record(id):
     collection.delete_one({'_id': id})
 
 
+
 # ====== Stores a password ====== #
+
+def __hash_id(id):
+    id_with_key = (id + KEY_SECRET).encode('utf-8')
+    hash = hashlib.sha256(id_with_key)
+    return hash.hexdigest()
 
 
 '''
@@ -73,11 +81,15 @@ Stores a password in the database, and returns its ID.
 def set_password():
     pwd = request.form['password']
     hashed = __hash_password(pwd)
+    id = str(uuid.uuid4())
+    id_hashed = __hash_id(id)
     model = {
+        '_id': __hash_id(id),
         'hash': hashed,
         'date': datetime.utcnow()
     }
-    return str(__add_record(model))
+    __add_record(model)
+    return id
 
 
 # ====== Deletes a password from the database ====== #
@@ -87,7 +99,7 @@ Deletes the password with specified ID from the database.
 '''
 @app.route('/password/<id>', methods=['DELETE'])
 def delete_password(id):
-    oid = ObjectId(id)
+    oid = __hash_id(id)
     __delete_record(oid)
     return 'OK'
 
@@ -101,7 +113,7 @@ Returns true/200 OK if the password is correct, otherwise false/403 Forbidden.
 '''
 @app.route('/password/test/<id>', methods=['POST'])
 def test_password(id):
-    oid = ObjectId(id)
+    oid = __hash_id(id)
     pwd = request.form['password']
     rec = __get_record(oid)
     if not rec:

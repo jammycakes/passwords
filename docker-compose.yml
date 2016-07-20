@@ -32,6 +32,7 @@ services:
       - ./passwords:/code
     environment:
       PASSWORD_SECRET: "vgauiLoEurnGEkKrnWk9RkE7jegAGB7zsgjipmv375C9xBAi1x0Dgv7rZHJFOxVA"
+      KEY_SECRET: "rGkVhNBbuv6LtFzrPOrFwJmzilYajN2Cm8qrWWz9ztkoU2iPClq4DjkO5B19hBG5"
       WORK_FACTOR: "12"
 
   db:
