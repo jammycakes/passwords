@@ -22,19 +22,21 @@ WORK_FACTOR = int(os.environ['WORK_FACTOR'])
 
 # ====== Password hashing ====== #
 
-'''
-Passwords are hashed twice, using two separate algorithms.
-
-The first algorithm is a SHA-512 hash of the password, combined with the global
-salt. This serves two purposes. First, it gets round bcrypt's upper length limit
-of 72 characters; second, it adds a "secret" independent of the database to
-prevent brute forcing by anyone who does not already know the secret.
-
-The second algorithm is bcrypt, which does the heavy lifting, while also providing
-a password-specific salt.
-'''
-
 def __prehash(pwd):
+    '''
+    Passwords are hashed twice, using two separate algorithms.
+
+    The first algorithm is a SHA-512 hash of the password, combined with the
+    password hashing secret. This serves two purposes. First, it gets round
+    bcrypt's upper length limit of 72 characters; second, it adds a "secret"
+    independent of the database to prevent brute forcing by anyone who does
+    not already know the secret.
+
+    The second algorithm is bcrypt, which does the heavy lifting, while also
+    providing a password-specific salt.
+
+    This method calculates the prehash, i.e. only the SHA-512.
+    '''
     return hashlib.sha512((pwd + PASSWORD_SECRET).encode()).digest()
 
 def __hash_password(pwd):
@@ -65,7 +67,6 @@ def __delete_record(id):
     collection.delete_one({'_id': id})
 
 
-
 # ====== Stores a password ====== #
 
 def __hash_id(id):
@@ -74,11 +75,17 @@ def __hash_id(id):
     return hash.hexdigest()
 
 
-'''
-Stores a password in the database, and returns its ID.
-'''
 @app.route('/password', methods=['POST'])
 def set_password():
+    '''
+    Stores a password in the database, and returns its ID.
+
+    To invoke this method, issue an HTTP POST request, passing in the password
+    as an HTTP form field called "pasword".
+
+    The method will return a GUID by which the password can be identified.
+    This GUID should then be saved in the "password" field in your users table.
+    '''
     pwd = request.form['password']
     hashed = __hash_password(pwd)
     id = str(uuid.uuid4())
@@ -94,11 +101,17 @@ def set_password():
 
 # ====== Deletes a password from the database ====== #
 
-'''
-Deletes the password with specified ID from the database.
-'''
 @app.route('/password/<id>', methods=['DELETE'])
 def delete_password(id):
+    '''
+    Deletes the password with specified ID from the database.
+
+    To invoke this method, issue an HTTP DELETE request, passing in the GUID
+    returned from the "set_password" method above in the URL in place of the
+    "<id>" placeholder.
+
+    This method will return 200 OK.
+    '''
     oid = __hash_id(id)
     __delete_record(oid)
     return 'OK'
@@ -106,13 +119,18 @@ def delete_password(id):
 
 # ====== Tests a password ====== #
 
-'''
-Tests the password with given ID.
-
-Returns true/200 OK if the password is correct, otherwise false/403 Forbidden.
-'''
 @app.route('/password/test/<id>', methods=['POST'])
 def test_password(id):
+    '''
+    Tests the password with given ID.
+
+    To invoke this method, issue an HTTP POST request, passing in the GUID
+    returned from the "set_password" method above in the URL in place of the
+    "<id>" placeholder. The candidate password being tested should be passed
+    in as a form field called "password", as with the set_password method.
+
+    Returns true/200 OK if the password is correct, otherwise false/403 Forbidden.
+    '''
     oid = __hash_id(id)
     pwd = request.form['password']
     rec = __get_record(oid)
