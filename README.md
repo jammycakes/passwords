@@ -11,6 +11,32 @@ containers if signups get really busy.
 This project defines two docker images: the password microservice, and a sample
 web application designed to hook into it.
 
+Running on your local machine
+-----------------------------
+Install [Docker Engine](https://docs.docker.com/engine/installation/)
+and [Docker Compose](https://docs.docker.com/compose/install/).
+
+On OS X or Windows, edit your hosts file (OS X: `/etc/hosts`; Windows: `c:\Windows\System32\drivers\etc\hosts`)
+and add the following line:
+
+    *.passwords.local localhost
+
+On Ubuntu, create the file `/etc/NetworkManager/dnsmasq.d/hosts.conf` if it does not already exist,
+then add the line:
+
+    address=/passwords.local/127.0.0.1/
+
+then restart NetworkManager using `sudo restart network-manager`.
+
+To run the containers:
+
+    docker-compose build
+    docker-compose up
+
+You can then access the web application at
+
+    http://web.passwords.local/
+
 The microservice API
 --------------------
 The password API defines three endpoints:
