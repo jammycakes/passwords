@@ -81,9 +81,12 @@ ideally be stored in a secret store.
 The work factor used by the bcrypt algorithm. A factor of about 12 means that hashing takes
 roughly a quarter of a second.
 
-To run:
-=======
+The web application
+-------------------
 
-Make sure you have Docker and Docker Compose installed.
+Consuming the password service is illustrated with a very simple Django web application.
+The file `web/webapp/security.py` contains a custom password hasher that plugs into the
+password hashing service.
 
-Type: `docker-compose up` to start up the app.
+Writing adapters/hashers for other platforms (e.g. ASP.NET Identity, Rails, WordPress)
+is left as an exercise for the reader.
