@@ -20,3 +20,6 @@ def register(request):
 
     rc = RequestContext(request, { 'form': form })
     return render(request, 'registration/register.html', rc)
+
+def profile(request):
+    return HttpResponseRedirect('/')
