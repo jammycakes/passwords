@@ -19,12 +19,12 @@ and [Docker Compose](https://docs.docker.com/compose/install/).
 On OS X or Windows, edit your hosts file (OS X: `/etc/hosts`; Windows: `c:\Windows\System32\drivers\etc\hosts`)
 and add the following line:
 
-    *.passwords.local localhost
+    *.passwords.localhost localhost
 
 On Ubuntu, create the file `/etc/NetworkManager/dnsmasq.d/hosts.conf` if it does not already exist,
 then add the line:
 
-    address=/passwords.local/127.0.0.1/
+    address=/passwords.localhost/127.0.0.1/
 
 then restart NetworkManager using `sudo restart network-manager`.
 
@@ -35,7 +35,7 @@ To run the containers:
 
 You can then access the web application at
 
-    http://web.passwords.local/
+    http://web.passwords.localhost/
 
 The microservice API
 --------------------

@@ -5,7 +5,7 @@ version: '2'
 services:
   traefik:
     image: traefik
-    command: --web --docker --docker.domain=passwords.local --logLevel=DEBUG
+    command: --web --docker --docker.domain=passwords.localhost --logLevel=DEBUG
     ports:
       - "80:80"
       - "8080:8080"
@@ -23,7 +23,7 @@ services:
     command: python serve.py
     labels:
       - "traefik.backend=service"
-      - "traefik.frontend.rule=Host:service.passwords.local"
+      - "traefik.frontend.rule=Host:service.passwords.localhost"
     links:
       - passwords-db
     ports:
@@ -47,10 +47,10 @@ services:
       - "8000"
     labels:
       - "traefik.backend=web"
-      - "traefik.frontend.rule=Host:web.passwords.local"
+      - "traefik.frontend.rule=Host:web.passwords.localhost"
     links:
       - db
       - passwords-svc
-      - traefik:service.passwords.local
+      - traefik:service.passwords.localhost
     depends_on:
       - db
