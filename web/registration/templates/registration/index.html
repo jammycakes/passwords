@@ -2,7 +2,9 @@
 
 {% block content %}
 
-{% if not user.is_authenticated %}
+{% if user.is_authenticated %}
+    <p>Welcome {{ user.username }}</p>
+{% else %}
     <ul>
         <li><a href="/login">Login</a></li>
     </ul>
