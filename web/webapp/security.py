@@ -5,7 +5,7 @@ import urllib.request
 from django.contrib.auth.hashers import BasePasswordHasher
 from django.utils.translation import ugettext_noop as _
 
-SERVICE_BASE_URL = 'http://service.passwords.localhost/'
+SERVICE_BASE_URL = 'http://service.passwords.local/'
 
 class ServicePasswordHasher(BasePasswordHasher):
 
